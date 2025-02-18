@@ -1,60 +1,44 @@
-let participantes = [];
+<!DOCTYPE html>
+<html lang="es">
 
-function agregarAmigo() {
-    let amigo = document.getElementById("amigo").value.trim();
-    if (amigo === "" || participantes.includes(amigo)) {
-        alert("Nombre inválido o repetido.");
-        return;
-    }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <title>Amigo Secreto</title>
+</head>
 
-    participantes.push(amigo);
-    document.getElementById("amigo").value = "";
+<body>
+    <main class="main-content">
+        <header class="header-banner">
+            <h1 class="main-title">Amigo Secreto</h1>
+            <img src="assets/amigo-secreto.png" alt="Imagen representativa de amigo secreto">
+        </header>
+        <section class="input-section">
+            <h2 class="section-title">Digite el nombre de sus amigos</h2>
+            <div class="input-wrapper">
+                <input type="text" id="amigo" class="input-name" placeholder="Escribe un nombre">
+                <button class="button-add" onclick="agregarAmigo()">Añadir</button>
+            </div>
 
-    actualizarLista();
-}
+            <ul id="listaAmigos" class="name-list" aria-labelledby="listaAmigos" role="list"></ul>
+            <ul id="resultado" class="result-list" aria-live="polite"></ul>
 
-function actualizarLista() {
-    let lista = document.getElementById("listaAmigos");
-    lista.innerHTML = "";
-    participantes.forEach((amigo) => {
-        let li = document.createElement("li");
-        li.textContent = amigo;
-        lista.appendChild(li);
-    });
-}
+            <div class="button-container">
+                <button class="button-draw" onclick="sortearAmigo()" aria-label="Sortear amigo secreto">
+                    <img src="assets/play_circle_outline.png" alt="Ícono para sortear">
+                    Sortear amigo
+                </button>
+            </div>
+        </section>
+    </main>
 
-function sortearAmigo() {
-    if (participantes.length < 2 || participantes.length % 2 !== 0) {
-        alert("Se necesitan al menos 2 participantes y un número par.");
-        return;
-    }
+    <script src="app.js" defer></script>
+</body>
 
-    let mezcla = [...participantes];
-
-    //  Fisher-Yates Shuffle para desordenar la lista
-    for (let i = mezcla.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [mezcla[i], mezcla[j]] = [mezcla[j], mezcla[i]];
-    }
-
-    let asignaciones = {};
-
-    // Emparejar de dos en dos
-    for (let i = 0; i < mezcla.length; i += 2) {
-        asignaciones[mezcla[i]] = mezcla[i + 1];
-        asignaciones[mezcla[i + 1]] = mezcla[i];
-    }
-
-    mostrarResultado(asignaciones);
-}
-
-function mostrarResultado(asignaciones) {
-    let resultadoDiv = document.getElementById("resultado");
-    resultadoDiv.innerHTML = "<h3>Resultados:</h3>";
-
-    for (let participante in asignaciones) {
-        let p = document.createElement("p");
-        p.textContent = `${participante} ↔ ${asignaciones[participante]}`;
-        resultadoDiv.appendChild(p);
-    }
-}
+</html>
