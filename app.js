@@ -1,4 +1,3 @@
-// El principal objetivo de este desafío es fortalecer tus habilidades en lógica de programación. Aquí deberás desarrollar la lógica para resolver el problema.
 let participantes = [];
 
 function agregarAmigo() {
@@ -25,26 +24,25 @@ function actualizarLista() {
 }
 
 function sortearAmigo() {
-    if (participantes.length < 2) {
-        alert("Se necesitan al menos 2 participantes.");
+    if (participantes.length < 2 || participantes.length % 2 !== 0) {
+        alert("Se necesitan al menos 2 participantes y un número par.");
         return;
     }
 
+    let mezcla = [...participantes];
+
+    //  Fisher-Yates Shuffle para desordenar la lista
+    for (let i = mezcla.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [mezcla[i], mezcla[j]] = [mezcla[j], mezcla[i]];
+    }
+
     let asignaciones = {};
-    let disponibles = [...participantes];
 
-    for (let participante of participantes) {
-        let opciones = disponibles.filter(p => p !== participante);
-
-        if (opciones.length === 0) {
-            alert("Error en la asignación. Inténtalo de nuevo.");
-            return;
-        }
-
-        let elegido = opciones[Math.floor(Math.random() * opciones.length)];
-        asignaciones[participante] = elegido;
-
-        disponibles = disponibles.filter(p => p !== elegido);
+    // Emparejar de dos en dos
+    for (let i = 0; i < mezcla.length; i += 2) {
+        asignaciones[mezcla[i]] = mezcla[i + 1];
+        asignaciones[mezcla[i + 1]] = mezcla[i];
     }
 
     mostrarResultado(asignaciones);
@@ -56,7 +54,7 @@ function mostrarResultado(asignaciones) {
 
     for (let participante in asignaciones) {
         let p = document.createElement("p");
-        p.textContent = `${participante} → ${asignaciones[participante]}`;
+        p.textContent = `${participante} ↔ ${asignaciones[participante]}`;
         resultadoDiv.appendChild(p);
     }
 }
